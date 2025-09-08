@@ -10,7 +10,7 @@ export class AuthService {
 
 
     async register ( registerDto: RegisterDto ) {
-        const {full_name,email, password, phone_number, company_name, country, is_seller } = registerDto;
+        const {full_name,email, password, phone_number, company_name, country, is_seller, is_approved } = registerDto;
         // Vérifier si l'utilisateur existe déjà
     const userExists = await this.prisma.users.findUnique({
         where: { email },
@@ -39,13 +39,12 @@ export class AuthService {
             }
         }
     )
-
     //si c'est un vendeur, créer un vendeur
     if(is_seller){
         await this.prisma.sellers.create({
             data:{
                 company_name,
-                
+                is_approved:false,
                 country,
                 userId: user.id,
             },

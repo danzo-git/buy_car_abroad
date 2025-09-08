@@ -64,4 +64,13 @@ export class RegisterDto {
   @IsString()
   @IsOptional()
   country?: string;
+
+  @ApiProperty({
+    description: 'Indique si l’utilisateur s’inscrit en tant que vendeur',
+    example: true,
+    required: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  is_approved: boolean;
 }

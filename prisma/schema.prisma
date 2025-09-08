@@ -18,6 +18,7 @@ enum UserRole {
   client
   seller
   admin
+  pending_seller
 }
 model users {
   id           Int       @id @default(autoincrement())
@@ -36,7 +37,7 @@ model sellers {
   company_name String?
   
   country      String?
-
+  is_approved  Boolean @default(false)
   // Relation avec user
   userId Int   @unique
   user   users @relation(fields: [userId], references: [id])
