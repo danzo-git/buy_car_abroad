@@ -5,7 +5,10 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { SellersService } from './sellers.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ApproveSellerDto } from './dto/approve-seller.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Sellers')
+@ApiBearerAuth()
 @Controller('sellers')
 export class SellersController {
 constructor(private sellersService: SellersService) {}
