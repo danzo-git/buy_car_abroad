@@ -8,7 +8,7 @@ export class CreateSellerDto {
   })
   @IsString()
   @IsNotEmpty()
-  user_id: string;
+  user_id: number;
 
   @ApiProperty({
     description: 'Nom de l\'entreprise du vendeur',

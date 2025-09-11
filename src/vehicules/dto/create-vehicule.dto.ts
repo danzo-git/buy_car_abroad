@@ -48,7 +48,7 @@ export class CreateVehiculeDto {
   })
   @IsNumber()
   @IsPositive()
-  year: String;
+  year: string;
 
   @ApiProperty({
     description: 'Statut du véhicule (disponible, vendu, réservé)',
@@ -58,14 +58,15 @@ export class CreateVehiculeDto {
   })
   @IsString()
   @IsOptional()
-  status?: string;
+  status: string;
 
   @ApiProperty({
     description: 'ID du vendeur',
-    example: '550e8400-e29b-41d4-a716-446655440000',
+    example: 1,
     required: false
   })
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  seller_id?: number;
+  @IsPositive()
+  seller_id: number;
 } 

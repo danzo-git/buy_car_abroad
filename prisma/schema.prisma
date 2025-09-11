@@ -55,8 +55,8 @@ model vehicules {
   country_of_origin String
   status           String
   year              String
-  seller_id         Int?
-  seller            sellers?       @relation(fields: [seller_id], references: [id]) 
+  seller_id         Int
+  seller            sellers       @relation(fields: [seller_id], references: [id]) 
   images            vehiculeImage[]
 }
 

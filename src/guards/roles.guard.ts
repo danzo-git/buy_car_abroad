@@ -1,11 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private prisma: PrismaService
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<string[]>('roles', [
       context.getHandler(),
       context.getClass(),
@@ -16,6 +20,28 @@ export class RolesGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-    return requiredRoles.some((role) => user.role === role);
+    
+    // Vérifier si l'utilisateur a l'un des rôles requis
+    const hasRequiredRole = requiredRoles.some((role) => user.role === role);
+    
+    if (!hasRequiredRole) {
+      return false;
+    }
+
+    // Si l'utilisateur est un vendeur, vérifier s'il est approuvé
+    if (user.role === 'seller') {
+      const seller = await this.prisma.sellers.findFirst({
+        where: { 
+          userId: user.id,
+          is_approved: true 
+        },
+      });
+
+      if (!seller) {
+        throw new ForbiddenException('Votre compte vendeur est en attente d\'approbation par un administrateur');
+      }
+    }
+
+    return true;
   }
-} 
+}
