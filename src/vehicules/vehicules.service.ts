@@ -1,14 +1,14 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateVehiculeDto } from './dto/create-vehicule.dto';
-//import {se}from
+
 @Injectable()
 export class VehiculesService {
     constructor( private Prisma: PrismaService){}
 
 
     async createVehicule(createVehiculeDto: CreateVehiculeDto, userId?: number) {
-        const { seller_id, ...rest } = createVehiculeDto;
+        const { seller_id, images, ...rest } = createVehiculeDto;
         
         // Vérifier si le vendeur existe 
         if (userId) {
@@ -23,6 +23,10 @@ export class VehiculesService {
                 data: {
                     ...rest,
                     seller_id: seller.id,
+                    // Gérer les images correctement pour Prisma
+                    images: images ? { 
+                        create: images.map((url) => ({ url })) 
+                    } : undefined,
                 },
                 include: {
                     images: true,
@@ -46,6 +50,10 @@ export class VehiculesService {
             data: {
                 ...rest,
                 seller_id,
+                // Gérer les images correctement pour Prisma
+                images: images ? { 
+                    create: images.map((url) => ({ url })) 
+                } : undefined,
             },
             include: {
                 images: true,

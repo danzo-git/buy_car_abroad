@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString,IsEnum, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-
+import { VehiculeStatus } from "@prisma/client"; 
 export class CreateVehiculeDto {
   @ApiProperty({
     description: 'Description du véhicule',
@@ -48,7 +48,7 @@ export class CreateVehiculeDto {
   })
   @IsNumber()
   @IsPositive()
-  year: string;
+  year: number;
 
   @ApiProperty({
     description: 'Statut du véhicule (disponible, vendu, réservé)',
@@ -56,9 +56,9 @@ export class CreateVehiculeDto {
     required: false,
     default: 'available'
   })
-  @IsString()
-  @IsOptional()
-  status: string;
+  @IsEnum(VehiculeStatus) // ⬅️ validation de l’enum
+  @IsOptional()           // si tu veux qu’il prenne la valeur par défaut ("AVAILABLE")
+  status?: VehiculeStatus;
 
   @ApiProperty({
     description: 'ID du vendeur',
@@ -69,4 +69,16 @@ export class CreateVehiculeDto {
   @IsOptional()
   @IsPositive()
   seller_id: number;
+
+
+  @ApiProperty({
+    type: [String],
+    description: 'Liste des URLs des images du véhicule',
+    example: ['http://site.com/img1.jpg', 'http://site.com/img2.jpg'],
+    required: false
+  })
+  @IsArray()
+  @IsOptional()
+  images?: string[];
+
 } 

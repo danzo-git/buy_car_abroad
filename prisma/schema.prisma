@@ -45,20 +45,26 @@ model sellers {
 }
 
 
-model vehicules {
+enum VehiculeStatus {
+  AVAILABLE
+  SOLD
+  PENDING
+}
 
-  id               Int    @id @default(autoincrement())
-  description      String  
-  brand            String 
+model vehicules {
+  id               Int             @id @default(autoincrement())
+  description      String
+  brand            String
   model            String
   price            Float
   country_of_origin String
-  status           String
-  year              String
-  seller_id         Int
-  seller            sellers       @relation(fields: [seller_id], references: [id]) 
-  images            vehiculeImage[]
+  status           VehiculeStatus  @default(AVAILABLE)
+  year             Int
+  seller_id        Int
+  seller           sellers         @relation(fields: [seller_id], references: [id])
+  images           vehiculeImage[]
 }
+
 
 model vehiculeImage {
   id        Int   @id @default(autoincrement())
