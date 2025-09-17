@@ -8,7 +8,7 @@ import { Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
-import { AuthGuard } from "@nestjs/passport";
+import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { Request } from "express";
 
 import { extname } from "path";
@@ -29,7 +29,7 @@ export class VehiculesController {
     constructor(private readonly vehiculesService: VehiculesService) {}
 
 @Post('create')
-@UseGuards(AuthGuard('Jwt'))
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(
     FilesInterceptor('images',5,{
         storage:diskStorage({
@@ -58,3 +58,4 @@ export class VehiculesController {
         return this.vehiculesService.createVehicule(dtoWithImages, req.user.id);
     }
 }
+

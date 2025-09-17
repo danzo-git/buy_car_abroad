@@ -41,7 +41,7 @@ model sellers {
   // Relation avec user
   userId Int   @unique
   user         users @relation(fields: [userId], references: [id])
-  vehicles     vehicules[]
+  vehicules     vehicules[]
 }
 
 
@@ -70,5 +70,5 @@ model vehiculeImage {
   id        Int   @id @default(autoincrement())
   url       String
   vehiculeId Int
-  vehicule   vehicules @relation(fields: [vehiculeId], references: [id])
+  vehicule   vehicules @relation(fields: [vehiculeId], references: [id], onDelete: Cascade)
 }
